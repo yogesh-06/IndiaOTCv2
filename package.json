@@ -1,0 +1,45 @@
+{
+  "name": "indiaotc",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev  -p 3002",
+    "build": "next build",
+    "start": "next start  -p 3002",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@next/third-parties": "^14.2.4",
+    "@rive-app/canvas": "^2.19.1",
+    "@rive-app/react-canvas": "^4.13.1",
+    "axios": "^1.7.2",
+    "bootstrap": "^5.3.3",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
+    "fs": "^0.0.1-security",
+    "gsap": "^3.12.5",
+    "html-react-parser": "^5.1.10",
+    "jose": "^5.6.3",
+    "jquery": "^3.7.1",
+    "js-cookie": "^3.0.5",
+    "next": "^14.2.5",
+    "notistack": "^3.0.1",
+    "path": "^0.12.7",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.0.375",
+    "qrcode.react": "^4.2.0",
+    "react": "^18",
+    "react-bootstrap": "^2.10.4",
+    "react-countup": "^6.5.3",
+    "react-dom": "^18",
+    "react-simple-typewriter": "^5.0.1",
+    "react-slick": "^0.30.2",
+    "select2": "^4.1.0-rc.0",
+    "slick-carousel": "^1.8.1",
+    "swiper": "^11.1.14"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5"
+  }
+}
