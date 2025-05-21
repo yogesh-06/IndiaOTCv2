@@ -1,17 +1,14 @@
 "use client";
-
-import { APITemplate } from "@/component/API/Template";
 import Footer from "@/component/Footer";
-import { checkUserCountry, checkUserVPNValid } from "@/component/global";
 import Header from "@/component/Header";
-import axios from "axios";
-import CryptoJS from "crypto-js";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SnackbarProvider, enqueueSnackbar } from "notistack";
-import { createRef, useEffect, useRef, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
+import CryptoJS from "crypto-js";
+import { APITemplate } from "@/component/API/Template";
+import Stepper from "@/component/Stepper";
 
-const Page = ({ params }) => {
+const Page = () => {
   const router = useRouter();
   const inputRefs = useRef([]);
   const [loading, setLoading] = useState(false);
@@ -103,9 +100,13 @@ const Page = ({ params }) => {
     async function getUserCheck() {
       let isValidCountry = await checkUserCountry();
       if (!isValidCountry) {
-        enqueueSnackbar("We are not available in your country", {
-          variant: "error",
-        });
+        // enqueueSnackbar("We are not available in your country", {
+        //   variant: "error",
+        // });
+        setErrors([]);
+        const newErrors = [];
+        newErrors.push("We are not available in your country", 100);
+        setErrors(newErrors);
         setTimeout(() => {
           router.push("/");
         }, 2000);
@@ -140,8 +141,11 @@ const Page = ({ params }) => {
 
     const newErrors = [];
 
-    if (!email) newErrors.push("email");
+    if (!email) {
+      newErrors.push("email");
+    }
     if (!isChecked) newErrors.push("isChecked");
+
     if (!emailRegex.test(email)) newErrors.push("invalid");
     setErrors(newErrors);
     if (newErrors.length > 0) return;
@@ -153,12 +157,16 @@ const Page = ({ params }) => {
       const response = await APITemplate("user/Register", "POST", formData);
       if (response.success == true) {
         setLoading(false);
-        enqueueSnackbar(
-          "OTP has been sent to your email",
-          { variant: "success" },
-          { autoHideDuration: 500 }
-        );
-        setOTPHash(response.data.otpHash);
+        // enqueueSnackbar(
+        //   "OTP has been sent to your email",
+        //   { variant: "success" },
+        //   { autoHideDuration: 500 }
+        // );
+        setErrors([]);
+        const newErrors = [];
+        newErrors.push("OTP has been sent to your email", 200);
+        setErrors(newErrors);
+        setOTPHash(response?.data?.otpHash);
         setIsSent(true);
         setTimeLeft(30);
         setIsDisabled(true);
@@ -167,27 +175,39 @@ const Page = ({ params }) => {
         setLoading(false);
         console.log(response);
         if (response.message == "Email Already Registered") {
-          enqueueSnackbar(
-            response.message,
-            { variant: "info" },
-            { autoHideDuration: 500 }
-          );
+          // enqueueSnackbar(
+          //   response.message,
+          //   { variant: "info" },
+          //   { autoHideDuration: 500 }
+          // );
+          setErrors([]);
+          const newErrors = [];
+          newErrors.push(response.message, 100);
+          setErrors(newErrors);
         } else {
-          enqueueSnackbar(
-            response.message,
-            { variant: "error" },
-            { autoHideDuration: 500 }
-          );
+          // enqueueSnackbar(
+          //   response.message,
+          //   { variant: "error" },
+          //   { autoHideDuration: 500 }
+          // );
+          setErrors([]);
+          const newErrors = [];
+          newErrors.push(response.message, 100);
+          setErrors(newErrors);
         }
       }
     } catch (error) {
       setLoading(false);
       console.log(error);
-      enqueueSnackbar(
-        "Something went wrong",
-        { variant: "error" },
-        { autoHideDuration: 500 }
-      );
+      // enqueueSnackbar(
+      //   "Something went wrong",
+      //   { variant: "error" },
+      //   { autoHideDuration: 500 }
+      // );
+      setErrors([]);
+      const newErrors = [];
+      newErrors.push("Something went wrong", 100);
+      setErrors(newErrors);
     }
   };
 
@@ -197,12 +217,17 @@ const Page = ({ params }) => {
     const response = await APITemplate("user/Register", "POST", formData);
     if (response.success == true) {
       setLoading(false);
-      enqueueSnackbar(
-        "OTP has been sent to your email",
-        { variant: "success" },
-        { autoHideDuration: 500 }
-      );
-      setOTPHash(response.data.otpHash);
+      // enqueueSnackbar(
+      //   "OTP has been sent to your email",
+      //   { variant: "success" },
+      //   { autoHideDuration: 500 }
+      // );
+      setErrors([]);
+      const newErrors = [];
+      newErrors.push("OTP has been sent to your email", 200);
+      setErrors(newErrors);
+
+      setOTPHash(response?.data?.otpHash);
       setIsSent(true);
       setTimeLeft(30);
       setIsDisabled(true);
@@ -211,26 +236,35 @@ const Page = ({ params }) => {
       setLoading(false);
       console.log(response);
       if (response.message == "Email Already Registered") {
-        enqueueSnackbar(
-          response.message,
-          { variant: "info" },
-          { autoHideDuration: 500 }
-        );
+        // enqueueSnackbar(
+        //   response.message,
+        //   { variant: "info" },
+        //   { autoHideDuration: 500 }
+        // );
+        setErrors([]);
+        const newErrors = [];
+        newErrors.push(response.message, 100);
+        setErrors(newErrors);
       } else {
-        enqueueSnackbar(
-          response.message,
-          { variant: "error" },
-          { autoHideDuration: 500 }
-        );
+        // enqueueSnackbar(
+        //   response.message,
+        //   { variant: "error" },
+        //   { autoHideDuration: 500 }
+        // );
+        setErrors([]);
+        const newErrors = [];
+        newErrors.push(response.message, 100);
+        setErrors(newErrors);
       }
     }
   };
 
   const handleVerifyOTP = (enteredOtp) => {
     setLoading(true);
+
     setErrors([]);
     const newErrors = [];
-    if (!verificationCode) newErrors.push("verificationCode");
+    if (!verificationCode) newErrors.push("verificationCode", 100);
     setErrors(newErrors);
     if (newErrors.length > 0) {
       setLoading(false);
@@ -238,23 +272,16 @@ const Page = ({ params }) => {
     }
 
     if (otpHash == CryptoJS.MD5(parseInt(enteredOtp).toString()).toString()) {
-      // enqueueSnackbar(
-      //   "OTP is correct",
-      //   { variant: "success" },
-      //   { autoHideDuration: 500 }
-      // );
-      setStep("setPassword");
+      setTimeout(() => {
+        setStep("verificationSuccess");
+      }, 2000);
     } else {
-      newErrors.push("verificationCode");
+      newErrors.push("OTP is incorrect", 100);
+      setErrors(newErrors);
       if (newErrors.length > 0) {
         setLoading(false);
         return;
       }
-      enqueueSnackbar(
-        "OTP is incorrect",
-        { variant: "error" },
-        { autoHideDuration: 500 }
-      );
     }
     setLoading(false);
   };
@@ -299,9 +326,14 @@ const Page = ({ params }) => {
     }
     try {
       if (password !== confirmPassword) {
-        enqueueSnackbar("Passwords do not match", {
-          variant: "warning",
-        });
+        // enqueueSnackbar("Passwords do not match", {
+        //   variant: "warning",
+        // });
+        setErrors([]);
+        const newErrors = [];
+        newErrors.push("Passwords do not match", 100);
+        setErrors(newErrors);
+
         return;
       } else {
         const formData = new FormData();
@@ -314,20 +346,32 @@ const Page = ({ params }) => {
           formData
         );
         if (responseLink.success == true) {
-          enqueueSnackbar(responseLink.message, { variant: "success" });
+          // enqueueSnackbar(responseLink.message, { variant: "success" });
           // setStep("getResidency");
+          setErrors([]);
+          const newErrors = [];
+          newErrors.push(responseLink.message, 200);
+          setErrors(newErrors);
           window.location.href = "/kyc/verification";
         } else {
-          enqueueSnackbar(responseLink.message, { variant: "error" });
+          // enqueueSnackbar(responseLink.message, { variant: "error" });
+          setErrors([]);
+          const newErrors = [];
+          newErrors.push(responseLink.message, 100);
+          setErrors(newErrors);
         }
       }
     } catch (error) {
       console.log(error);
-      enqueueSnackbar(
-        "Something went wrong",
-        { variant: "error" },
-        { autoHideDuration: 500 }
-      );
+      // enqueueSnackbar(
+      //   "Something went wrong",
+      //   { variant: "error" },
+      //   { autoHideDuration: 500 }
+      // );
+      setErrors([]);
+      const newErrors = [];
+      newErrors.push("Something went wrong", 100);
+      setErrors(newErrors);
     } finally {
       setLoading(false);
     }
@@ -352,155 +396,202 @@ const Page = ({ params }) => {
 
     return () => clearInterval(intervalId); // Clean up the interval when the component unmounts or the timer ends
   }, [timer, isSent]);
-  return (
-    <>
-      <Header currentLang={"en"} />
 
+  return (
+    <div className="">
       <div
         style={{
-          backgroundImage: `url(/images/bg-register.jpg)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          position: "relative",
+          padding: "20px",
+          color: "#000",
         }}
       >
-        <div className="container">
-          <div
-            className={`row align-items-center justify-content-center  min-vh-90 ${
-              step > 5 && "d-none"
-            }`}
-          >
-            <div
-              className=" col-md-8 col-11 col-lg-7 col-xl-6 rounded-4 bg-white shadow-lg py-3 px-4 my-5 "
-              style={{ border: "1px solid rgb(201, 201, 201)" }}
-            >
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background:
+              "linear-gradient(135deg,rgb(3, 101, 193) -10%, #BB34CF 80%, #C70FC4 10%)",
+            filter: "blur(600px)",
+            zIndex: -1, // Place the blurred background behind the content
+          }}
+        />
+        <Header />
+
+        <div className="container p-0">
+          <div className="d-flex flex-column align-items-center justify-content-center gap-4 min-vh-90">
+            <Stepper currentStep={"register"} data={{}} />
+            <div className="col-md-5 bg-white rounded-5 shadow py-4 px-3 mb-md-5 my-2">
               {step == "register" ? (
-                <div className="d-flex flex-column align-items-start gap-4 p-3">
-                  <h1 className="fw-medium">Create your account</h1>
-                  <div className="w-100 d-flex flex-column gap-2 mt-2">
+                <div className="d-flex flex-column align-items-start gap-3">
+                  <div className="w-100 text-center">
+                    <h4 className="fw-bold">Create Your Account</h4>
+                    <div className="arrow-line w-100 my-3" />
+                  </div>
+
+                  <div className="w-100 d-flex flex-column gap-3 mt-md-3">
                     <div className="form-group">
-                      <label className="text-muted">
-                        Enter your email address to recieve a verification code
+                      <label className="fs-6">
+                        Enter your email address to receive a code
                       </label>
-                      <input
-                        type="text"
-                        name="email"
-                        className={`form-control form-control-lg bg-transparent  mt-2  ${
-                          errors.includes("email") && "border-2 border-danger"
-                        }`}
-                        placeholder="Enter Your Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
+                      <div className="d-flex justify-content-center align-items-center position-relative">
+                        <input
+                          type="text"
+                          name="email"
+                          className={`form-control form-control-lg bg-transparent  mt-3  ${
+                            (errors.includes("email") ||
+                              errors.includes("invalid")) &&
+                            "border-1 border-danger bg-danger-subtle"
+                          }`}
+                          placeholder="Enter Your Email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <div
+                          className="position-absolute cursor-pointer end-0 px-3 mt-3 translate-end-x"
+                          onClick={() => setShowPassword(!showPassword)}
+                          disabled={!password}
+                        >
+                          <i className="fa-regular fa-envelope fa-2xl text-secondary"></i>
+                        </div>
+                      </div>
                     </div>
 
-                    {errors.includes("email") && (
+                    {(errors.includes("email") ||
+                      errors.includes("invalid")) && (
                       <p
                         className="text-danger  fw-medium m-0 p-0 pb-2"
                         style={{ fontSize: "13px" }}
                       >
                         Please enter a valid email. For emails, only the '@'
-                        symbol is allowed—spaces and special characters are not
-                        permitted.
+                        symbol is <br /> allowed—spaces and special characters
+                        are not permitted.
                       </p>
                     )}
 
-                    <div>
-                      <div className="d-flex align-items-start gap-2 p-2">
-                        <input
-                          type="checkbox"
-                          className="form-check-input m-1"
-                          id="useragreement"
-                          checked={isChecked}
-                          onChange={(e) => setIsChecked(e.target.checked)}
-                        />
-                        <label htmlFor="useragreement">
-                          You must accept the{" "}
-                          <Link
-                            target="_blank"
-                            className="text-primary"
-                            href="/en/terms-of-use"
-                          >
-                            Terms of Service
-                          </Link>{" "}
-                          and{" "}
-                          <Link
-                            target="_blank"
-                            className="text-primary"
-                            href="/en/privacy-policies"
-                          >
-                            Privacy Policy
-                          </Link>{" "}
-                          to create an account.
-                        </label>
-                      </div>
-                      <p className="text-center mt-4">
+                    <div className="d-flex align-items-start gap-2 px-md-2">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id="useragreement"
+                        checked={isChecked}
+                        onChange={(e) => setIsChecked(e.target.checked)}
+                      />
+                      <label htmlFor="useragreement" className="">
+                        I agree to the{" "}
+                        <Link
+                          target="_blank"
+                          className="text_Primary_500 fw-semibold text-decoration-underline link-offset-3"
+                          href="/terms-of-use"
+                        >
+                          Terms of Service
+                        </Link>{" "}
+                        &{" "}
+                        <Link
+                          target="_blank"
+                          className="text_Primary_500 fw-semibold text-decoration-underline link-offset-3"
+                          href="/privacy-policies"
+                        >
+                          Privacy Policy
+                        </Link>{" "}
+                      </label>
+                    </div>
+
+                    {errors.includes("isChecked") && (
+                      <p
+                        className="text-danger text-center fw-medium m-0 p-0 pb-2"
+                        style={{ fontSize: "13px" }}
+                      >
+                        You need to accept our terms and privacy policy to
+                        create an account.
+                      </p>
+                    )}
+
+                    {errors.includes(100) && (
+                      <p
+                        className="text-danger text-center fw-medium m-0 p-0 pt-2 "
+                        style={{ fontSize: "13px" }}
+                      >
+                        {errors[0]}
+                      </p>
+                    )}
+
+                    {errors.includes(200) && (
+                      <p
+                        className="text-success text-center fw-medium m-0 p-0 pt-2 "
+                        style={{ fontSize: "13px" }}
+                      >
+                        {errors[0]}
+                      </p>
+                    )}
+
+                    <div className="d-flex flex-column mt-md-4">
+                      <button
+                        className="btn btn-lg Primary_500 text-white fw-medium my-3 mt-5 mt-md-5 "
+                        disabled={loading}
+                        onClick={handleRegister}
+                      >
+                        {loading ? (
+                          <div className="d-flex align-items-center">
+                            <div
+                              className="spinner-border "
+                              role="status"
+                              style={{ width: "1.5rem", height: "1.5rem" }}
+                            >
+                              <span className="visually-hidden">
+                                Loading...
+                              </span>
+                            </div>
+                            <span className="ms-2">Loading...</span>
+                          </div>
+                        ) : (
+                          "Send Verification Code"
+                        )}
+                      </button>
+                      <p className="text-center">
                         Already have an account?{" "}
                         <Link
                           href="/login"
-                          className="text-primary text-decoration-none fs-6"
+                          className="text_Primary_500 text-decoration-underline fs-6 fw-semibold link-offset-3"
                         >
                           Login
                         </Link>
                       </p>
                     </div>
-
-                    {errors.includes("isChecked") && (
-                      <p
-                        className="text-danger text-center fw-medium m-0 p-0 mt-2"
-                        style={{ fontSize: "13px" }}
-                      >
-                        You must accept the Terms of Service and Privacy Policy
-                        to create an account.
-                      </p>
-                    )}
-
-                    <button
-                      className="btn btn-lg btn-warning mt-3 text-uppercase"
-                      disabled={loading}
-                      onClick={handleRegister}
-                    >
-                      {loading ? (
-                        <div className="d-flex align-items-center">
-                          <div
-                            className="spinner-border "
-                            role="status"
-                            style={{ width: "1.5rem", height: "1.5rem" }}
-                          >
-                            <span className="visually-hidden">Loading...</span>
-                          </div>
-                          <span className="ms-2">Loading...</span>
-                        </div>
-                      ) : (
-                        "Send verification code"
-                      )}
-                    </button>
                   </div>
                 </div>
               ) : step == "verifyEmail" ? (
-                <div className="d-flex flex-column align-items-center gap-3 p-3">
-                  <h1 className="fw-medium">Email Verification</h1>
-                  <p className="text-muted p-1">
-                    Enter the verification code sent to{" "}
-                    <a className="text-primary"> {email}</a>
-                  </p>
+                <div className="d-flex flex-column align-items-center gap-3 py-3 p-0">
+                  <div className="w-100 text-center">
+                    <h4 className="fw-bold">Email Verification</h4>
+                    <div className="arrow-line w-100 my-3" />
+                  </div>
+                  <div className="w-100 text-center">
+                    <p className="text-muted p-1">
+                      Enter the verification code sent to{" "}
+                      <a className="text-primary"> {email}</a>
+                    </p>
+                  </div>
                   <div className="d-flex flex-column align-items-center justify-content-center">
-                    <div className="d-flex justify-content-center gap-2 mb-3">
+                    <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
                       {verificationCode.map((digit, index) => (
                         <input
                           key={index}
                           ref={inputRefs.current[index]}
                           type="text"
                           maxLength="1"
-                          className={`form-control mx-1 text-center ${
-                            errors.includes("verificationCode") &&
-                            "border-danger"
-                          }`}
+                          className={`form-control mx-md-1 mx-0 text-center Primary_50_light
+                            ${digit ? "border_primary" : ""}
+                            ${
+                              errors.includes(100) &&
+                              "border border-1 border-danger bg-danger-subtle"
+                            }`}
                           style={{
-                            width: "50px",
-                            height: "50px",
+                            maxWidth: "50px",
                             borderRadius: "8px",
-                            border: "2px solid #ced4da",
                             fontSize: "1.2rem",
                           }}
                           value={digit}
@@ -510,25 +601,30 @@ const Page = ({ params }) => {
                         />
                       ))}
                     </div>
-                    {errors.includes("verificationCode") && (
-                      <p className="text-danger"> Invalid OTP</p>
+
+                    {errors.includes(100) && (
+                      <p className="text-danger fw-semibold small text-center">
+                        The code you entered is incorrect. Please try again
+                      </p>
                     )}
 
-                    <button
-                      className="btn btn-outline-info mt-2"
+                    <div
+                      className="fw-normal text_Primary_500 cursor-pointer mb-4 mt-md-3"
                       onClick={handleOTPResend}
                       disabled={isDisabled}
                     >
                       {isDisabled
                         ? `Resend code in ${timeLeft}s`
                         : "Resend code"}
-                    </button>
+                      <div className="Primary_500 border border-1 border_primary"></div>
+                    </div>
 
-                    <small className="text-muted text-center cursor-pointer p-1 mt-4">
-                      Didn&apos;t receive a code? Check your span folder, or{" "}
+                    <small className="text-muted fw-light text-center cursor-pointer p-1 mt-4">
+                      Didn&apos;t receive a code?
                       <br />
+                      Check your span folder, or{" "}
                       <a
-                        className="text-primary fs-6 text-decoration-underline"
+                        className="text_Primary_500 fw-semibold fs-6 text-decoration-underline"
                         onClick={() => setStep("register")}
                       >
                         try a different email address
@@ -536,32 +632,71 @@ const Page = ({ params }) => {
                     </small>
                   </div>
                 </div>
+              ) : step == "verificationSuccess" ? (
+                <div className="d-flex flex-column align-items-center gap-3 p-2">
+                  <div className="w-100 text-center">
+                    <h4 className="fw-bold">Email Verification</h4>
+                    <div className="arrow-line w-100 mt-3" />
+                  </div>
+
+                  <div className="d-flex flex-column align-items-center justify-content-center">
+                    <img
+                      src="/images/verification-success.png"
+                      alt=""
+                      style={{
+                        width: "88px",
+                      }}
+                      className="img-fluid mb-3"
+                    />
+                    <h6 className="fw-bold m-0">Success !!</h6>
+                    <p className="text-muted text-center">
+                      You have been successfully authenticated
+                    </p>
+                  </div>
+                  <button
+                    className="btn Primary_500 text-white w-100 mt-md-5"
+                    onClick={() => setStep("setPassword")}
+                  >
+                    {loading ? (
+                      <div className="d-flex align-items-center">
+                        <div
+                          className="spinner-border "
+                          role="status"
+                          style={{ width: "1.5rem", height: "1.5rem" }}
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        <span className="ms-2">Loading...</span>
+                      </div>
+                    ) : (
+                      <>
+                        Continue <i className="fa-solid fa-arrow-right"></i>
+                      </>
+                    )}
+                  </button>
+                </div>
               ) : step == "setPassword" ? (
-                <div className="d-flex flex-column align-items-center gap-4 p-3">
-                  <h1 className="fw-semibold">Set Your Password</h1>
-                  <div className="w-100 d-flex flex-column gap-4 my-2">
+                <div className="d-flex flex-column align-items-center gap-3 py-md-3 px-2">
+                  <div className="w-100 text-center">
+                    <h4 className="fw-bold">Set Your Password</h4>
+                    <div className="arrow-line w-100 my-3" />
+                  </div>
+                  <div className="w-100 d-flex flex-column gap-4 mb-2">
                     <div className="form-group">
                       <label
-                        className={`${
+                        className={`mb-2 ${
                           errors.includes("password") && "text-danger"
                         }`}
                       >
-                        {password &&
-                        confirmPassword &&
-                        password != confirmPassword ? (
-                          <span className="text-danger">
-                            Password not matched.
-                          </span>
-                        ) : (
-                          "Password"
-                        )}
+                        Password
                       </label>
                       <div className="d-flex justify-content-center position-relative">
                         <input
                           type={showPassword ? "text" : "password"}
                           name="password"
-                          className={`form-control form-control-lg bg-transparent ${
-                            errors.includes("password") && "border-danger"
+                          className={`form-control form-control-lg ${
+                            errors.includes("passwordStrong") &&
+                            "border border-1 border-danger bg-danger-subtle"
                           }`}
                           placeholder=""
                           value={password}
@@ -574,9 +709,9 @@ const Page = ({ params }) => {
                           disabled={!password}
                         >
                           {showPassword ? (
-                            <i class="fa-solid fa-eye-slash"></i>
+                            <i className="fa-solid fa-eye-slash"></i>
                           ) : (
-                            <i class="fa-solid fa-eye"></i>
+                            <i className="fa-solid fa-eye"></i>
                           )}
                         </div>
                       </div>
@@ -589,49 +724,73 @@ const Page = ({ params }) => {
                       >
                         Confirm Password
                       </label>
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        name="confirmPassword"
-                        className={`form-control form-control-lg bg-transparent  mt-2 ${
-                          errors.includes("confirmPassword") && "border-danger"
-                        }`}
-                        placeholder=""
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                      />
+                      <div className="d-flex justify-content-center align-items-center position-relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          name="confirmPassword"
+                          className={`form-control form-control-lg  mt-2 ${
+                            errors.includes("passwordStrong") &&
+                            "border border-1 border-danger bg-danger-subtle"
+                          }`}
+                          placeholder=""
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        <div
+                          className="position-absolute cursor-pointer end-0 px-3 mt-2 me-1 translate-end-x"
+                          onClick={() => setShowPassword(!showPassword)}
+                          disabled={!confirmPassword}
+                        >
+                          {showPassword ? (
+                            <i className="fa-solid fa-eye-slash"></i>
+                          ) : (
+                            <i className="fa-solid fa-eye"></i>
+                          )}
+                        </div>
+                      </div>
                     </div>
 
-                    {errors.includes("passwordStrong") && (
-                      <ul className="text-danger">
-                        <li>Password must contain at least 8 characters.</li>
-                        <li>
-                          Including uppercase, lowercase, a number, and a
-                          special character.
+                    {/* {errors.includes("passwordStrong") && ( */}
+                    <ul className="text-danger">
+                      {(password?.length < 8 ||
+                        confirmPassword?.length < 8) && (
+                        <li className="mt-1">
+                          Password must contain at least 8 characters.
                         </li>
-                      </ul>
-                    )}
-                    <div className="password-strength mt-2 px-1">
+                      )}
+                      {errors.includes("passwordStrong") && (
+                        <li className="mt-1">
+                          Include upper, lower, a number, and a special
+                          character.
+                        </li>
+                      )}
+                      {password != confirmPassword && (
+                        <li className="mt-1">Password not matched.</li>
+                      )}
+                    </ul>
+
+                    <div className="password-strength mt-md-2 px-1">
                       <div className="d-flex justify-content-between ">
                         <small
-                          className={
-                            strength >= 1 ? "text-danger" : "text-muted"
-                          }
+                          className={`fw-bold
+                            ${strength >= 1 ? "text-danger" : "text-muted"}
+                         `}
                         >
-                          Weak
+                          Low
                         </small>
                         <small
-                          className={
-                            strength >= 3 ? "text-warning" : "text-muted"
-                          }
+                          className={`fw-bold
+                            ${strength >= 1 ? "text-warning" : "text-muted"}
+                         `}
                         >
                           Medium
                         </small>
                         <small
-                          className={
-                            strength >= 5 ? "text-success" : "text-muted"
-                          }
+                          className={`fw-bold
+                            ${strength >= 1 ? "text-success" : "text-muted"}
+                         `}
                         >
-                          Strong
+                          High
                         </small>
                       </div>
 
@@ -655,43 +814,76 @@ const Page = ({ params }) => {
                         />
                       </div>
                     </div>
-                    <div class="mt-1">
-                      <ul class="list-unstyled ps-3">
-                        <li class="d-flex align-items-center mb-2">
-                          <i class="fa-solid fa-info-circle text-primary me-3"></i>
-                          <span class="text-muted">Minimum 8 characters</span>
+                    <div className="d-flex justify-content-between mt-md-3">
+                      <ul className="list-unstyled">
+                        <li className="d-flex align-items-start align-items-md-center mb-2">
+                          <img
+                            alt=""
+                            src="/svgs/check-circle.svg"
+                            className="rounded-2"
+                            height="20"
+                          />
+                          <span className="ms-2 text-muted">
+                            Minimum 8 characters
+                          </span>
                         </li>
-                        <li class="d-flex align-items-center mb-2">
-                          <i class="fa-solid fa-info-circle text-primary me-3"></i>
-                          <span class="text-muted">
+                        <li className="d-flex align-items-start align-items-md-center mb-2">
+                          <img
+                            alt=""
+                            src="/svgs/check-circle.svg"
+                            className="rounded-2"
+                            height="20"
+                          />
+                          <span className="ms-2 text-muted">
                             At least one uppercase letter
                           </span>
                         </li>
-                        <li class="d-flex align-items-center mb-2">
-                          <i class="fa-solid fa-info-circle text-primary me-3"></i>
-                          <span class="text-muted">
+                        <li className="d-flex align-items-start align-items-md-center mb-2">
+                          <img
+                            alt=""
+                            src="/svgs/check-circle.svg"
+                            className="rounded-2"
+                            height="20"
+                          />
+                          <span className="ms-2 text-muted">
                             At least one lowercase letter
                           </span>
                         </li>
-                        <li class="d-flex align-items-center mb-2">
-                          <i class="fa-solid fa-info-circle text-primary me-3"></i>
-                          <span class="text-muted">At least one number</span>
+                      </ul>
+                      <ul className="list-unstyled">
+                        <li className="d-flex align-items-start align-items-md-center mb-2">
+                          <img
+                            alt=""
+                            src="/svgs/check-circle.svg"
+                            className="rounded-2"
+                            height="20"
+                          />
+                          <span className="ms-2 text-muted">
+                            At least one number
+                          </span>
                         </li>
-                        <li class="d-flex align-items-center mb-2">
-                          <i class="fa-solid fa-info-circle text-primary me-3"></i>
-                          <span class="text-muted">At least one symbol</span>
+                        <li className="d-flex align-items-start align-items-md-center mb-2">
+                          <img
+                            alt=""
+                            src="/svgs/check-circle.svg"
+                            className="rounded-2"
+                            height="20"
+                          />
+                          <span className="ms-2 text-muted">
+                            At least one symbol
+                          </span>
                         </li>
                       </ul>
                     </div>
 
                     <button
-                      disabled={
-                        !password ||
-                        !confirmPassword ||
-                        password != confirmPassword ||
-                        loading
-                      }
-                      className="btn btn-lg btn-warning mt-2"
+                      // disabled={
+                      //   !password ||
+                      //   !confirmPassword ||
+                      //   password != confirmPassword ||
+                      //   loading
+                      // }
+                      className="btn btn-lg Primary_500 text-white"
                       onClick={handleSetPassword}
                     >
                       {loading ? (
@@ -706,26 +898,26 @@ const Page = ({ params }) => {
                           <span className="ms-2">Loading...</span>
                         </div>
                       ) : (
-                        "Next"
+                        "Save"
                       )}
                     </button>
                   </div>
                 </div>
               ) : null}
             </div>
+            <div className="text-center d-md-none">
+              <img
+                src="/images/logo-watermark-png.png"
+                className="img-fluid"
+                width={230}
+                alt=""
+              />
+            </div>
           </div>
         </div>
       </div>
-      {/* <div className="d-flex flex-column gap-1 px-4 py-2">
-        <ul className="">
-          <li>Device Type: {userDetails?.deviceType},</li>
-          <li>IP Address: {userDetails?.ip},</li>
-          <li>OS Type: {userDetails?.osType},</li>
-          <li>Browser Type: {userDetails?.userAgent}</li>
-        </ul>
-      </div> */}
-      <Footer language={"en"} />
-    </>
+      <Footer />
+    </div>
   );
 };
 

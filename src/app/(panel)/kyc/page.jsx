@@ -350,7 +350,7 @@ export default function KYC() {
                   <div className="px-2">
                     <h3>FAQ</h3>
                     <Link
-                      href="/en/contact"
+                      href="/contact"
                       target="_blank"
                       className="text-secondary text-decoration-underline mt-1"
                     >

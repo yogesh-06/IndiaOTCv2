@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { APITemplate } from "./API/Template";
 
 const TakePhoto = ({ isOpen, onClose, onPhotoSubmit }) => {
   const [loading, setLoading] = useState(false);

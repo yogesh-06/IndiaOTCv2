@@ -1,23 +1,20 @@
-import { Inter } from "next/font/google";
-import "bootstrap/dist/css/bootstrap.css";
 import "./globals.css";
+import "bootstrap/dist/css/bootstrap.css";
+import { Montserrat } from "next/font/google";
 import { UserProvider } from "@/context/UserContext";
-import CookieConsentBar from "@/component/CookieConsentBar";
-const inter = Inter({ subsets: ["latin"] });
+const inter = Montserrat({ subsets: ["latin"] });
+import Script from "next/script";
 
 export const metadata = {
-  title: "IndiaOTC",
+  title: "DubaiOTC",
   description: "",
   keywords: [],
-  // alternates: {
-  //   canonical: ⁠ ${process.env.DOMAIN}/service ⁠,
-  // },
 };
 
 export default function RootLayout({ children }) {
   return (
     <UserProvider>
-      <html lang="en">
+      <html>
         <head>
           <link
             rel="stylesheet"
@@ -26,10 +23,13 @@ export default function RootLayout({ children }) {
         </head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <body className={inter.className}>
-          <div>
-            <CookieConsentBar />
-          </div>
           {children}
+
+          <Script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossOrigin="anonymous"
+          ></Script>
         </body>
       </html>
     </UserProvider>

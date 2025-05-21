@@ -1,5 +1,5 @@
 import axios from "axios";
-import { APITemplate } from "./API/Template";
+// import { APITemplate } from "./API/Template";
 
 export const DateFormate = (date) => {
   return new Date(date).toLocaleDateString("en-US", {
@@ -15,7 +15,7 @@ export const getGeoDetails = async () => {
     return response.data; // Return the country code
   } catch (err) {
     console.error("Failed to fetch country:", err);
-    // throw new Error("Failed to fetch country");
+    return { countryCode: "AE" }; // or null, or some default value
   }
 };
 
@@ -81,23 +81,5 @@ export const checkUserCountry = async () => {
   } catch (error) {
     console.log(error.message);
     return false;
-  }
-};
-
-export const isFileProtected = async (file) => {
-  try {
-    const formData = new FormData();
-    formData.append("pdfFile", file);
-
-    let response = await APITemplate("user/checkPdfPassword", "POST", formData);
-
-    if (response?.success == true) {
-      return false;
-    } else {
-      return true;
-    }
-  } catch (error) {
-    console.error("Error reading PDF:", error);
-    return true; // Default to not protected in case of other errors
   }
 };

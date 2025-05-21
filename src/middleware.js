@@ -15,17 +15,17 @@ export async function middleware(request) {
     return response;
   }
   if (request.nextUrl.pathname === "/login" && session) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/kyc", request.url));
   }
   if (request.nextUrl.pathname === "/register" && session) {
     if (session.status == "active") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/kyc", request.url));
     } else {
       return NextResponse.redirect(new URL("/kyc", request.url));
     }
   }
 
-  const lockedPaths = ["/kyc", "/dashboard", "/orders", "/accountStatement"];
+  const lockedPaths = ["/kyc", "/orders", "/accountStatement"];
 
   // const languages = ["en", "fr", "it", "lt", "ru", "es"];
 
@@ -77,9 +77,9 @@ export async function middleware(request) {
       path: "/",
     });
 
-    if (request.nextUrl.pathname == "/") {
-      return NextResponse.redirect(new URL("/register", request.url));
-    }
+    // if (request.nextUrl.pathname == "/") {
+    //   return NextResponse.redirect(new URL("/register", request.url));
+    // }
     return response;
   }
 
@@ -101,9 +101,6 @@ export async function middleware(request) {
     request.nextUrl.pathname != "/kyc/verification"
   ) {
     return NextResponse.redirect(new URL("/kyc", request.url));
-  }
-  if (request.nextUrl.pathname == "/") {
-    return NextResponse.redirect(new URL("/en", request.url));
   }
 
   return response;

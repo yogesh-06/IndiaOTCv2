@@ -1,19 +1,18 @@
-import { Inter } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.css";
+import { Inter } from "next/font/google";
 import "../globals.css";
-import { LoaderProvider } from "@/context/LoaderProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "IndiaOTC",
+  title: "DubaiOTC",
   description: "",
 };
 
 export default function RootLayout({ children }) {
   return (
     <>
-      <div className="position-relative">{children}</div>
+      <div className="position-relative hero-bg-sm">{children}</div>
     </>
   );
 }

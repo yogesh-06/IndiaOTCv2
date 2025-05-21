@@ -6,9 +6,8 @@ import { checkUserCountry, checkUserVPNValid } from "@/component/global";
 import Header from "@/component/Header";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { enqueueSnackbar } from "notistack";
-import { useState } from "react";
-import { useEffect } from "react";
+import { enqueueSnackbar, SnackbarProvider } from "notistack";
+import { useState, useEffect } from "react";
 
 const Page = () => {
   const router = useRouter();
@@ -62,8 +61,8 @@ const Page = () => {
               { autoHideDuration: 500 }
             );
             setTimeout(() => {
-              // router.push("/dashboard");
-              window.location.href = "/dashboard";
+              // router.push("/kyc/verification");
+              window.location.href = "/kyc/verification";
             }, 500);
           }
         } else {
@@ -141,7 +140,8 @@ const Page = () => {
 
   return (
     <>
-      <Header currentLang={"en"} />
+      <SnackbarProvider />
+      <Header />
       <div className="container-fluid px-0">
         <div className="row h-100">
           <div className="col-md-6 bg-light">
@@ -161,7 +161,7 @@ const Page = () => {
                     <div className="d-flex flex-column gap-2">
                       <h3>Login your account</h3>
                       <p className="">
-                        IndiaOTC, one of the fastest-growing digital currency
+                        DubaiOTC, one of the fastest-growing digital currency
                         trading desks.
                       </p>
                     </div>
@@ -272,7 +272,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <Footer language={"en"} />
+      <Footer />
     </>
   );
 };

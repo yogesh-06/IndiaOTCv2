@@ -8,7 +8,7 @@ export const APITemplate = async (url, method, data = {}, headers = {}) => {
       withCredentials: true, // Include credentials (cookies)
       headers: {
         ...headers,
-        // caches: "no-store",
+        caches: "no-store",
       },
     };
 

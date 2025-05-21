@@ -1,13 +1,8 @@
 "use client";
-import { APITemplate } from "@/component/API/Template";
-import CustomSelect from "@/component/CustomSelect";
-import { getGeoDetails } from "@/component/global";
 import { useLoader } from "@/context/LoaderProvider";
 import { useUser } from "@/context/UserContext";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { enqueueSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Verification() {
   const router = useRouter();
