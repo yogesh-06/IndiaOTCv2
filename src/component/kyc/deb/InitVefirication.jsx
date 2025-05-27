@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { APITemplate } from "../API/Template";
 
-const InitVefirication = ({ user, setStep, verification, getVerification }) => {
-  // const { user } = useUser();
+const InitVefirication = ({ data, setStep, verification }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const [countryCode, setCountryCode] = useState("+971");
@@ -15,19 +14,21 @@ const InitVefirication = ({ user, setStep, verification, getVerification }) => {
   const [nationality, setNationality] = useState("");
   const [address, setAddress] = useState("");
   const [cityState, setCityState] = useState("");
+  console.log(verification);
 
   useEffect(() => {
-    if (user.phone) {
-      setWhatsappNumber(user?.phone);
-      setTelegramUsername(user?.telegramUsername);
-      setFullName(user?.fullName);
-      setDob(user?.dateOfBirth);
-      setGender(user?.gender);
-      setNationality(user?.nationality);
-      setAddress(user?.address);
-      setCityState(user?.cityState);
+    if (data) {
+      setWhatsappNumber(data?.phone || "");
+      setTelegramUsername(data?.telegramUsername || "");
+      setFullName(data?.fullName || "");
+      setDob(data?.dateOfBirth || "");
+      setGender(data?.gender || "");
+      setNationality(data?.nationality || "");
+      setAddress(data?.address || "");
+      setCityState(data?.cityState || "");
+      setCountryCode(data?.countryCode || "+971");
     }
-  }, [user]);
+  }, [data]);
 
   const handleIdentityVerification = async () => {
     setErrors([]);
@@ -53,15 +54,15 @@ const InitVefirication = ({ user, setStep, verification, getVerification }) => {
     }
 
     const formData = new FormData();
-    formData.append("phone", whatsappNumber);
-    formData.append("telegramUsername", telegramUsername);
-    formData.append("fullName", fullName);
-    formData.append("dateOfBirth", dob);
-    formData.append("gender", gender);
-    formData.append("nationality", nationality);
-    formData.append("address", address);
-    formData.append("cityState", cityState);
-    formData.append("countryCode", countryCode);
+    formData.append("phone", whatsappNumber || "");
+    formData.append("telegramUsername", telegramUsername || "");
+    formData.append("fullName", fullName || "");
+    formData.append("dateOfBirth", dob || "");
+    formData.append("gender", gender || "");
+    formData.append("nationality", nationality || "");
+    formData.append("address", address || "");
+    formData.append("cityState", cityState || "");
+    formData.append("countryCode", countryCode || "+971");
     formData.append("verificationId", verification?._id);
 
     try {

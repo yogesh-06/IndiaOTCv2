@@ -2072,12 +2072,12 @@ h2 {
   max-width: 100%;
 }
 
-.hero-bg{
+.hero-bg {
   background-image: url('/images/home-background.png');
   background-position: top;
   background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Mobile (default) */
@@ -2087,17 +2087,19 @@ h2 {
     width: 100%;
     /* height: auto; */
   }
-   .hero-bg{
+
+  .hero-bg {
     background-image: url('/images/Ellipse-mob.png');
     background-position: top;
     background-size: contain;
     background-repeat: no-repeat;
   }
-  .hero-bg-sm{
-   background-image: url('/images/Ellipse-mob.png');
-   background-position: top;
-   background-size: contain;
-   background-repeat: no-repeat;
+
+  .hero-bg-sm {
+    background-image: url('/images/Ellipse-mob.png');
+    background-position: top;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 }
 
@@ -2183,4 +2185,21 @@ h2 {
   .mobile-vh-100 {
     height: 100vh !important;
   }
+}
+
+.support-card {
+  background-color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+  min-width: 180px;
+}
+
+.support-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.support-link {
+  flex: 1;
+  min-width: 200px;
 }

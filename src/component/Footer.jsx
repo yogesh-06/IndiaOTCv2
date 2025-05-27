@@ -26,7 +26,7 @@ export default function Footer() {
                   <div className="text-start">
                     <Link href="/">
                       <img
-                        src={"/images/footer-logo.png"}
+                        src={"/images/logo.png"}
                         style={{
                           minWidth: "226px",
                           maxWidth: "251px",
@@ -38,8 +38,8 @@ export default function Footer() {
                   </div>
 
                   <div className="fs-6 text-white">
-                    <span className="fw-bold">DubaiOTC </span> is a premier
-                    crypto OTC platform based in Dubai, enabling individuals and
+                    <span className="fw-bold">IndiaOTC </span> is a premier
+                    crypto OTC platform based in India, enabling individuals and
                     businesses to buy and sell crypto with AED. We specialize in
                     bulk trades, fast settlements, and secure service — offering
                     tailored solutions to crypto traders, investors, and NRIs in
@@ -114,7 +114,7 @@ export default function Footer() {
                             href="/"
                             className="link-opacity-75 link-opacity-100-hover text-decoration-none fs-6 link-light"
                           >
-                            About DubaiOTC
+                            About IndiaOTC
                             <i className="fa-solid fa-arrow-right ms-3 hover-icon"></i>
                           </Link>
                         </li>
@@ -353,7 +353,7 @@ export default function Footer() {
             <div className="row text-md-start text-center gy-3">
               <div className="col-12 col-lg-6">
                 <div className="copyright-wrapper d-block mb-1 fs-6 fw-semibold text-white text-">
-                  &copy; {new Date().getFullYear()} DubaiOTC. All Rights
+                  &copy; {new Date().getFullYear()} IndiaOTC. All Rights
                   Reserved.
                 </div>
               </div>

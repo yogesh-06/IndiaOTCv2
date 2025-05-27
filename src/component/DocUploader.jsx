@@ -22,7 +22,8 @@ const DocUploader = ({
     setPhotoLoading(true);
     const formData = new FormData();
     const blob = new Blob([binaryData], { type: "image/png" });
-    const extractDocType = documentType !== "" ? "Emirate ID" : "Passport";
+    const extractDocType =
+      documentType === "PANCARD" ? "Pan Card" : "Aadhaar Card";
 
     formData.append("document", blob);
     formData.append("verificationId", verificationId);
@@ -52,9 +53,12 @@ const DocUploader = ({
   const handleDocumentUpload = async (e) => {
     setLoading(true);
     const formData = new FormData();
+    const extractDocType =
+      documentType === "PANCARD" ? "Pan Card" : "Aadhaar Card";
+
     formData.append("document", e.target.files[0]);
     formData.append("type", documentType);
-    formData.append("documentExtractType", documentType);
+    formData.append("documentExtractType", extractDocType);
     formData.append("verificationId", verificationId);
 
     try {
@@ -87,12 +91,13 @@ const DocUploader = ({
       </div>
 
       <div className="w-100 d-flex flex-column align-items-md-start align-items-center gap-2">
-        <div className="bg-light rounded-2 p-3">
+        <div className="bg-light rounded-2 p-3 w-100">
           <img
-            src={document == "" ? documentPreview : document}
+            src={!document || document == "" ? documentPreview : document}
             className="img-fluid"
             style={{
-              maxHeight: "150px",
+              minHeight: "165px",
+              maxHeight: "170px",
               width: "100%",
             }}
             alt=""
@@ -103,9 +108,9 @@ const DocUploader = ({
             <label
               htmlFor={id}
               className="cursor-pointer ps-1"
-              onClick={() => {
-                setDocument("");
-              }}
+              // onClick={() => {
+              //   setDocument("");
+              // }}
             >
               {loading ? (
                 <div className="d-flex align-items-center">

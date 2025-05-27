@@ -161,7 +161,7 @@ const Page = () => {
                     <div className="d-flex flex-column gap-2">
                       <h3>Login your account</h3>
                       <p className="">
-                        DubaiOTC, one of the fastest-growing digital currency
+                        IndiaOTC, one of the fastest-growing digital currency
                         trading desks.
                       </p>
                     </div>

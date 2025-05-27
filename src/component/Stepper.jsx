@@ -1,13 +1,20 @@
 const Stepper = ({ currentStep, data }) => {
   const steps = [
     { label: "Email", key: "register" },
-    { label: "Phone", key: "initVerification" },
-    { label: "Document", key: "uploadDocument" },
+    {
+      label: "Onboard",
+      key: "initVerification, onboardingType, applicantType, businessInfo",
+    },
+    {
+      label: "Document",
+      key: "uploadDocument, uploadBusinessDocs, uploadPersonalDocs, personalInfo",
+    },
     { label: "Questionaries", key: "questionaries" },
     { label: "Declaration", key: "declaration" },
   ];
 
-  const currentIndex = steps.findIndex((step) => step.key === currentStep) + 1;
+  const currentIndex =
+    steps.findIndex((step) => step.key.includes(currentStep)) + 1;
 
   return (
     <>
@@ -64,7 +71,7 @@ const Stepper = ({ currentStep, data }) => {
               className="d-flex align-items-center position-relative w-100 "
               style={{ height: "40px" }}
             >
-              {data.phone ? (
+              {data.type ? (
                 <div className="bg-white rounded-circle mx-2">
                   <i className="fa-solid fa-circle-check fa-2xl text_Primary_500 z-1 "></i>
                 </div>
@@ -94,9 +101,9 @@ const Stepper = ({ currentStep, data }) => {
 
             <div
               className="mt-2 text-start fw-semibold text-dark small"
-              // style={{ marginLeft: "-30px" }}
+              style={{ marginLeft: "-12px" }}
             >
-              Phone
+              Onboarding
             </div>
           </div>
           <div className="d-flex flex-column align-items-start flex-fill position-relative">

@@ -82,7 +82,7 @@ export default function Header() {
               data-bs-dismiss="offcanvas"
               aria-label="Close"
             >
-              <i class="fa-solid fa-xmark fa-2xl"></i>
+              <i className="fa-solid fa-xmark fa-2xl"></i>
             </button>
           </div>
 

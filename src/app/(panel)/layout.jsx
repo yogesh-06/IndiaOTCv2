@@ -5,7 +5,7 @@ import Link from "next/link";
 import { LoaderProvider } from "@/context/LoaderProvider";
 
 export const metadata = {
-  title: "DubaiOTC",
+  title: "IndiaOTC",
   description: "",
 };
 

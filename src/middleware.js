@@ -27,9 +27,6 @@ export async function middleware(request) {
 
   const lockedPaths = ["/kyc", "/orders", "/accountStatement"];
 
-  // const languages = ["en", "fr", "it", "lt", "ru", "es"];
-
-  // Check if the request is for a protected path and the user is not authenticated
   if (
     lockedPaths.some((path) => request.nextUrl.pathname.startsWith(path)) &&
     !session

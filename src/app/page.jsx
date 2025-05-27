@@ -18,7 +18,7 @@ const fetchExchangeData = async () => {
     const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}website/stats/getStatsByExchange`;
 
     const params = new URLSearchParams({
-      exchangeName: "Accounts-DubaiOTC",
+      exchangeName: "Accounts-IndiaOTC",
     });
 
     const res = await fetch(`${baseUrl}?${params.toString()}`, {
@@ -56,13 +56,13 @@ export default async function Home() {
               <div className="col-12 col-md-6 d-flex align-items-center py-md-0 py-5 mobile-vh-100">
                 <div className="d-flex flex-column justify-content-between h-100 w-100 gap-4">
                   <div className="display-2 d-md-none fw-medium lh-lg text-white text-md-danger">
-                    A Professional Crypto OTC Exchange in Dubai
+                    A Professional Crypto OTC Exchange in India
                   </div>
                   <h1
                     className="display-5 d-none d-md-block fw-medium lh-base"
                     style={{ color: "#454545" }}
                   >
-                    A Professional Crypto OTC Exchange in Dubai
+                    A Professional Crypto OTC Exchange in India
                   </h1>
                   <div>
                     <div className="d-md-inline-block btn-sm fw-medium text-light Primary_500 rounded-3 px-3 py-1">
@@ -234,7 +234,7 @@ export default async function Home() {
                 <h2 className="pt-3 options-hover-color">Crypto OTC Desk</h2>
                 <div className="options-hover-color">
                   Execute secure and high-value crypto transactions through our
-                  Crypto OTC in Dubai.
+                  Crypto OTC in India.
                 </div>
               </div>
             </div>
@@ -495,7 +495,7 @@ export default async function Home() {
                 </h1>
                 <p className="fs-4 fw-normal">
                   A quick and seamless process to start trading crypto with
-                  DubaiOTC.
+                  IndiaOTC.
                 </p>
               </div>
             </div>
@@ -588,16 +588,16 @@ export default async function Home() {
               <Heading
                 classes={"fs-1 fw-bold "}
                 lineWidth={"60%"}
-                heading={"Why Clients Use DubaiOTC"}
+                heading={"Why Clients Use IndiaOTC"}
               />
             </div>
             <p className="text-center display-4 fw-bold d-md-none">
-              Why Clients Use DubaiOTC
+              Why Clients Use IndiaOTC
             </p>
 
             <p className="fs-4 px-4">
               We serve real-world needs with secure, fast, and personalized OTC
-              crypto solutions in Dubai.
+              crypto solutions in India.
             </p>
           </div>
           <div className="row gy-5 justify-content-around">

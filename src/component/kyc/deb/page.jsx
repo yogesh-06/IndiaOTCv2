@@ -1,15 +1,12 @@
 "use client";
 import { APITemplate } from "@/component/API/Template";
 import Footer from "@/component/Footer";
+// import { getGeoDetails } from "@/component/global";
 import Header from "@/component/Header";
-import ApplicantType from "@/component/kyb/ApplicantType";
-import BusinessInformation from "@/component/kyb/businessInformation";
-import Personalnformation from "@/component/kyb/Personalnformation";
-import UploadBusinessDocs from "@/component/kyb/UploadBusinessDocs";
-import UploadPersonalDocs from "@/component/kyb/UploadPersonalDocs";
 import Completed from "@/component/kyc/Completed";
 import Declaration from "@/component/kyc/Declaration";
 import InitVefirication from "@/component/kyc/InitVefirication";
+import LivenessVerification from "@/component/kyc/LivenessVerification";
 import Questionaries from "@/component/kyc/Questionaries";
 import UploadDocument from "@/component/kyc/UploadDocument";
 import Stepper from "@/component/Stepper";
@@ -19,15 +16,22 @@ import { useRouter } from "next/navigation";
 import { SnackbarProvider } from "notistack";
 import { useEffect, useState } from "react";
 import OnboardingType from "./OnboardingType";
+import BusinessInformation from "@/component/kyb/businessInformation";
+import ApplicantType from "@/component/kyb/ApplicantType";
+import UploadBusinessDocs from "@/component/kyb/UploadBusinessDocs";
+import Personalnformation from "@/component/kyb/Personalnformation";
+import UploadPersonalDocs from "@/component/kyb/UploadPersonalDocs";
 
 export default function Verification() {
   const router = useRouter();
   const { user } = useUser();
   const { setLoader } = useLoader();
+  const [data, setData] = useState({});
   const [step, setStep] = useState("");
-  const [userData, setUserData] = useState({});
   const [stepsCompleted, setStepsCompleted] = useState({});
   const [verification, setVerification] = useState({});
+  const [countries, setCountries] = useState([]);
+  const [country, setCountry] = useState({});
 
   async function getVerification(id) {
     const response = await APITemplate(
@@ -43,12 +47,10 @@ export default function Verification() {
 
   useEffect(() => {
     if (user && user?._id) {
-      setUserData(user);
-
       setStepsCompleted({
         ...stepsCompleted,
         email: user?.email,
-        type: user?.type,
+        phone: verification?.applicant?.phone,
         identification:
           verification?.applicant?.documents?.length > 0 &&
           verification?.applicant?.documents?.[0]?.front_side &&
@@ -66,6 +68,21 @@ export default function Verification() {
   }, [user, verification, step]);
 
   useEffect(() => {
+    async function getCountries() {
+      // const geoDetails = await getGeoDetails();
+      let countrySet = {
+        label: "UAE",
+        value: "AE",
+      };
+
+      setCountry(countrySet);
+      let response = await APITemplate("user/getAllCountries", "GET");
+      setCountries(response.data);
+    }
+    getCountries();
+  }, []);
+
+  useEffect(() => {
     async function initStep() {
       if (!user?._id) return;
       let verificationResult = {};
@@ -79,38 +96,59 @@ export default function Verification() {
         router.push("/kyc");
         return;
       }
-      const doc =
-        verificationResult?.applicant?.documents?.length > 0 &&
-        verificationResult?.applicant?.documents.find(
-          (item) => item.type == "GOVERNMENT_ID"
-        );
-      const PANDoc =
-        verificationResult?.applicant?.documents?.length > 0 &&
-        verificationResult?.applicant?.documents.find(
-          (item) => item.type == "PANCARD"
-        );
-      const businessDocs =
-        verificationResult?.applicant?.documents?.length > 0 &&
-        verificationResult?.applicant?.documents.filter(
-          (item) => item.type.includes("BUSINESS_") && item
-        );
 
       if (user?.type) {
+        const updatedData = {
+          onboardingType: user?.type,
+        };
         if (user?.type == "individual") {
           if (user.phone) {
-            if (doc?.front_side && doc?.back_side) {
-              if (verificationResult.applicant.questionaries) {
-                if (verificationResult.applicant.declaration) {
-                  setStep("completed");
+            updatedData.phone = user.phone;
+            updatedData.telegramUsername = user.telegramUsername;
+
+            if (
+              user.nationalityCountry &&
+              verificationResult?.applicant?.documents?.length > 0
+            ) {
+              const doc = verificationResult.applicant.documents[0];
+
+              updatedData.documentType = doc.type;
+              updatedData.documentFrontSide = doc.front_side;
+              updatedData.documentBackSide = doc.back_side;
+              updatedData.panCard =
+                verification?.applicant?.documents?.length > 1 &&
+                verification?.applicant?.documents.find(
+                  (item) => item.type == "PANCARD"
+                )?.portrait;
+              updatedData.bankStatement =
+                verification?.applicant?.documents.find(
+                  (item) => item.type == "BANK_STATEMENT"
+                )?.files;
+              updatedData.nationalityCountry = user.nationalityCountry;
+
+              if (doc.front_side && doc.back_side) {
+                if (verificationResult.applicant.questionaries) {
+                  updatedData.questionaries =
+                    verificationResult.applicant.questionaries;
+
+                  if (verificationResult.applicant.declaration) {
+                    updatedData.declaration =
+                      verificationResult.applicant.declaration;
+                    setStep("completed");
+                  } else {
+                    setStep("questionaries");
+                  }
                 } else {
-                  setStep("declaration");
+                  setStep("questionaries");
                 }
               } else {
-                setStep("questionaries");
+                setStep("uploadDocument");
               }
             } else {
               setStep("uploadDocument");
             }
+
+            // setData((prev) => ({ ...prev, ...updatedData }));
           } else {
             setStep("initVerification");
           }
@@ -118,25 +156,14 @@ export default function Verification() {
 
         if (user?.type == "company") {
           if (verificationResult.applicant.applicantType) {
+            updatedData.applicantType =
+              verificationResult.applicant.applicantType;
             if (verificationResult.applicant.businessInfo) {
-              if (businessDocs && businessDocs.length > 0) {
-                if (user?.fullName && user?.gender && user?.address) {
-                  if (doc?.front_side && doc?.back_side && PANDoc?.portrait) {
-                    if (verificationResult.applicant.questionaries) {
-                      if (verificationResult.applicant.declaration) {
-                        setStep("completed");
-                      } else {
-                        setStep("declaration");
-                      }
-                    } else {
-                      setStep("questionaries");
-                    }
-                  } else {
-                    setStep("uploadPersonalDocs");
-                  }
-                } else {
-                  setStep("personalInfo");
-                }
+              updatedData.businessInfo =
+                verificationResult.applicant.businessInfo;
+              if (verificationResult.applicant.businessDocuments) {
+                updatedData.businessDocuments =
+                  verificationResult.applicant.businessDocuments;
               } else {
                 setStep("uploadBusinessDocs");
               }
@@ -147,6 +174,7 @@ export default function Verification() {
             setStep("applicantType");
           }
         }
+        setData((prev) => ({ ...prev, ...updatedData }));
       } else {
         setStep("onboardingType");
       }
@@ -154,10 +182,52 @@ export default function Verification() {
     initStep();
   }, [user]);
 
+  useEffect(() => {
+    if (!verification?.applicant) return;
+    const updatedData = {};
+
+    if (user?.type) {
+      updatedData.onboardingType = user.type;
+      updatedData.telegramUsername = user.telegramUsername;
+      updatedData.nationalityCountry = user?.nationalityCountry;
+    }
+
+    if (user?.phone) {
+      updatedData.phone = user.phone;
+      updatedData.telegramUsername = user.telegramUsername;
+      updatedData.nationalityCountry = user?.nationalityCountry;
+    }
+
+    if (verification.applicant.documents?.length > 0) {
+      const doc = verification.applicant.documents[0];
+      updatedData.documentType = doc.type;
+      updatedData.documentFrontSide = doc.front_side;
+      updatedData.documentBackSide = doc.back_side;
+      updatedData.panCard =
+        verification?.applicant?.documents?.length > 1 &&
+        verification?.applicant?.documents.find(
+          (item) => item.type == "PANCARD"
+        )?.portrait;
+      updatedData.bankStatement = verification?.applicant?.documents.find(
+        (item) => item.type == "BANK_STATEMENT"
+      )?.files;
+    }
+
+    if (verification.applicant.questionaries?.length > 0) {
+      updatedData.questionaries = verification.applicant.questionaries;
+    }
+
+    if (verification.applicant.declaration) {
+      updatedData.declaration = verification.applicant.declaration;
+    }
+
+    setData((prev) => ({ ...prev, ...updatedData }));
+  }, [verification]);
+
   // useEffect(() => {
-  // setTimeout(() => {
-  // setStep("uploadPersonalDocs"); //
-  // }, 2000);
+  //   setTimeout(() => {
+  //     setStep("uploadPersonalDocs"); //
+  //   }, 2000);
   // });
 
   return (
@@ -190,19 +260,22 @@ export default function Verification() {
 
         {step == "onboardingType" ? (
           <OnboardingType
-            user={userData}
+            data={data}
             setStep={setStep}
+            verification={verification}
             getVerification={getVerification}
           />
         ) : // KYC Steps
         step == "initVerification" ? (
           <InitVefirication
-            user={userData}
+            data={data}
             setStep={setStep}
             verification={verification}
+            getVerification={getVerification}
           />
         ) : step == "uploadDocument" ? (
           <UploadDocument
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
@@ -210,52 +283,59 @@ export default function Verification() {
         ) : // KYB Steps
         step == "applicantType" ? (
           <ApplicantType
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
           />
         ) : step == "businessInfo" ? (
           <BusinessInformation
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
           />
         ) : step == "uploadBusinessDocs" ? (
           <UploadBusinessDocs
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
           />
         ) : step == "personalInfo" ? (
           <Personalnformation
-            user={user}
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
           />
         ) : step == "uploadPersonalDocs" ? (
           <UploadPersonalDocs
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
           />
         ) : step == "questionaries" ? (
           <Questionaries
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
           />
         ) : step == "declaration" ? (
           <Declaration
+            data={data}
             setStep={setStep}
             verification={verification}
             getVerification={getVerification}
           />
         ) : step == "completed" ? (
           <Completed
+            // data={data}
             setStep={setStep}
             verification={verification}
-            getVerification={getVerification}
+            // getVerification={getVerification}
           />
         ) : (
           <div className="vh-100 d-flex align-items-center justify-content-center vw-100 bg-white">

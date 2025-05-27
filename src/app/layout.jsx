@@ -6,7 +6,7 @@ const inter = Montserrat({ subsets: ["latin"] });
 import Script from "next/script";
 
 export const metadata = {
-  title: "DubaiOTC",
+  title: "IndiaOTC",
   description: "",
   keywords: [],
 };

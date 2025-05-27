@@ -339,22 +339,19 @@ const Page = () => {
         const formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
-        formData.append("type", "individual");
+        formData.append("type", "");
         const responseLink = await APITemplate(
           "user/onboardUser",
           "POST",
           formData
         );
         if (responseLink.success == true) {
-          // enqueueSnackbar(responseLink.message, { variant: "success" });
-          // setStep("getResidency");
           setErrors([]);
           const newErrors = [];
           newErrors.push(responseLink.message, 200);
           setErrors(newErrors);
           window.location.href = "/kyc/verification";
         } else {
-          // enqueueSnackbar(responseLink.message, { variant: "error" });
           setErrors([]);
           const newErrors = [];
           newErrors.push(responseLink.message, 100);
@@ -363,11 +360,6 @@ const Page = () => {
       }
     } catch (error) {
       console.log(error);
-      // enqueueSnackbar(
-      //   "Something went wrong",
-      //   { variant: "error" },
-      //   { autoHideDuration: 500 }
-      // );
       setErrors([]);
       const newErrors = [];
       newErrors.push("Something went wrong", 100);

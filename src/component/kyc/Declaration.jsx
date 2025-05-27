@@ -110,7 +110,7 @@ const Declaration = ({ data, setStep, verification, getVerification }) => {
 
   return (
     <div className={`row align-items-start justify-content-center w-100`}>
-      <div className="col-md-6 rounded-5 bg-white shadow-lg p-4 mb-5">
+      <div className="col-md-5 rounded-5 bg-white shadow-lg p-4 mb-5">
         <div className="d-flex w-100 flex-column align-items-center gap-3 p-md-3 pt-0 w-100">
           <div className="d-flex flex-column gap-2 w-100">
             <div>
